@@ -7,18 +7,19 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
+
 class SignIn extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
             userName: "",
-            email: ""
+            password: ""
         }
     }
 
     submitLogin() {
-        console.log("state", this.state)
+        console.log("state", this.state);
     }
 
     render() {
@@ -39,10 +40,10 @@ class SignIn extends Component {
                         <FormHelperText>User name</FormHelperText>
                     </FormControl>
                     <FormControl className="classes.formControl">
-                        <Input type="email"
-                               onChange={event => this.setState({email: event.target.value})}
+                        <Input type="password"
+                               onChange={event => this.setState({password: event.target.value})}
                         />
-                        <FormHelperText>email adress</FormHelperText>
+                        <FormHelperText>password</FormHelperText>
                     </FormControl>
                     <Button variant="raised" color="primary"
                             onClick={() => this.submitLogin()}

@@ -4,8 +4,11 @@
 .link-button {
     color: white;
 }
-.form-container{
+.form-container {
+    display: grid;
     align-items: center;
     text-align: center;
-    margin-top: 15%;
+    margin-top: 20%;
+    margin-left: 30%;
+    margin-right: 30%;
 }

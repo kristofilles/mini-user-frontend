@@ -6,6 +6,8 @@ import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import {connect} from 'react-redux';
+import {addUser} from "../actions";
 
 class SignUp extends Component {
 
@@ -13,12 +15,14 @@ class SignUp extends Component {
         super(props);
         this.state = {
             userName: "",
-            email: ""
+            email: "",
+            password: ""
         }
     }
 
     submitRegistration() {
-        console.log("state", this.state)
+        console.log("state", this.state);
+        this.props.addUser(this.state.userName, this.state.email);
     }
 
     render() {
@@ -44,6 +48,12 @@ class SignUp extends Component {
                         />
                         <FormHelperText>email adress</FormHelperText>
                     </FormControl>
+                    <FormControl className="classes.formControl">
+                        <Input type="password"
+                               onChange={event => this.setState({password: event.target.value})}
+                        />
+                        <FormHelperText>password</FormHelperText>
+                    </FormControl>
                     <Button variant="raised" color="primary"
                             onClick={() => this.submitRegistration()}
                     >Register</Button>
@@ -53,4 +63,9 @@ class SignUp extends Component {
     }
 }
 
-export default SignUp;
+function mapStateToProps(state) {
+    const {userName, email} = state;
+    return {userName, email};
+}
+
+export default connect(mapStateToProps, {addUser})(SignUp);
