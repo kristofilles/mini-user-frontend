@@ -7,6 +7,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
+import axios from 'axios';
+import { withRouter } from "react-router-dom";
 
 
 class SignIn extends Component {
@@ -21,6 +23,15 @@ class SignIn extends Component {
 
     submitLogin() {
         console.log("state", this.state);
+        axios.post('http://localhost:8080/api/login', {
+            userName: this.state.userName,
+            password: this.state.password
+        })
+            .then(response => {
+                if (response.data === 'ACCEPTED') {
+                    this.props.history.push("/")
+                }
+            })
     }
 
     render() {
@@ -58,4 +69,4 @@ class SignIn extends Component {
     }
 }
 
-export default SignIn;
+export default withRouter(SignIn);
