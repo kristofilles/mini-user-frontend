@@ -4,11 +4,30 @@
 .link-button {
     color: white;
 }
-.form-container {
-    display: grid;
+.form-paper {
+    display: -webkit-inline-flex;
+    position: relative;
     align-items: center;
     text-align: center;
-    margin-top: 20%;
-    margin-left: 30%;
-    margin-right: 30%;
+    margin: 5% 23% 10%;
+    height: 40%;
+    width: 50%;
+}
+.form-container {
+    display: flex;
+    position: inherit;
+    flex-flow: column wrap;
+    height: 300px;
+    width: 600px;
+    min-height: 150px;
+    min-width: 150px;
+    margin: 0 auto;
+    padding-top: 10%;
+    padding-bottom: 10%;
+}
+.submit-button {
+    margin-top: 10%;
+}
+td, th {
+    text-align: center !important;
 }

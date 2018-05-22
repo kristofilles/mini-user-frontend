@@ -21,7 +21,7 @@ class App extends Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         fetch('http://localhost:8080/api/users')
             .then(results => {
                 return results.json();
