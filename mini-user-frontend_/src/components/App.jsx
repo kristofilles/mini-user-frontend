@@ -10,18 +10,27 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-
+import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
+import SignUp from './SignUp';
 
 class App extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            users: []
+            users: [],
+            adminLoggedIn: false
         }
     }
 
-    componentWillMount() {
+    checkAdminInCookies() {
+        if (read_cookie("loggedIn")===true) {
+            this.setState({adminLoggedIn: true})
+        }
+    }
+
+    componentDidMount() {
+        this.checkAdminInCookies();
         fetch('http://localhost:8080/api/users')
             .then(results => {
                 return results.json();
@@ -34,6 +43,12 @@ class App extends Component {
         })
     }
 
+    logOut() {
+        delete_cookie("loggedIn");
+        this.setState({adminLoggedIn: false});
+        this.props.history.push("/signin");
+    }
+
     render() {
         return (
             <div>
@@ -43,12 +58,13 @@ class App extends Component {
                             List of users
                         </Typography>
                         <div className="appbar-buttons">
-                            <Button color="inherit"><Link className='link-button' to="/signup">Register</Link></Button>
-                            <Button color="inherit"><Link className='link-button' to="/signin">Login</Link></Button>
+                            {this.state.adminLoggedIn ?
+                                <Button color="inherit" onClick={() => this.logOut()}>Logout</Button>
+                              : <Button color="inherit"><Link className='link-button' to="/signin">Login</Link></Button> }
                         </div>
                     </Toolbar>
                 </AppBar>
-                <div>
+                <div style={{"position": "relative"}}>
                     <Paper>
                         <Table>
                             <TableHead className="app-table">
@@ -70,6 +86,9 @@ class App extends Component {
                         </Table>
                     </Paper>
                 </div>
+                {this.state.adminLoggedIn
+                    ? <SignUp />
+                    : <div></div>}
             </div>
         )
     }

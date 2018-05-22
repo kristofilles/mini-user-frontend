@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
 import { withRouter } from "react-router-dom";
+import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
 
 
 class SignIn extends Component {
@@ -16,19 +17,19 @@ class SignIn extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            userName: "",
+            name: "",
             password: ""
         }
     }
 
     submitLogin() {
-        console.log("state", this.state);
         axios.post('http://localhost:8080/api/login', {
-            userName: this.state.userName,
+            name: this.state.name,
             password: this.state.password
         })
             .then(response => {
                 if (response.data === 'ACCEPTED') {
+                    bake_cookie("loggedIn", true);
                     this.props.history.push("/")
                 }
             })
@@ -48,7 +49,7 @@ class SignIn extends Component {
                     <form className="form-container">
                         <FormControl className="classes.formControl">
                             <Input type="text"
-                                   onChange={event => this.setState({userName: event.target.value})}
+                                   onChange={event => this.setState({name: event.target.value})}
                             />
                             <FormHelperText>User name</FormHelperText>
                         </FormControl>
