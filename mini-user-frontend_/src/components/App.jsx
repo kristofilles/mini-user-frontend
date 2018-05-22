@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -62,7 +62,7 @@ class App extends Component {
     logOut() {
         delete_cookie("loggedIn");
         this.setState({adminLoggedIn: false});
-        this.props.history.push("/signin");
+        this.props.history.push("/");
     }
 
     render() {
