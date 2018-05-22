@@ -6,8 +6,6 @@ import Button from '@material-ui/core/Button';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import {connect} from 'react-redux';
-import {addUser} from "../actions";
 import Paper from '@material-ui/core/Paper';
 
 class SignUp extends Component {
@@ -23,13 +21,12 @@ class SignUp extends Component {
 
     submitRegistration() {
         console.log("state", this.state);
-        this.props.addUser(this.state.userName, this.state.email);
     }
 
     render() {
         return (
             <div>
-                <AppBar position="static">
+                <AppBar className="appbar" position="static">
                     <Toolbar>
                         <Typography align="center" variant="title" color="inherit" className="form-name">
                             Sign Up
@@ -57,7 +54,7 @@ class SignUp extends Component {
                             <FormHelperText>password</FormHelperText>
                         </FormControl>
                         <Button variant="raised" color="primary"
-                                style={{"margin-top": "10%", "margin-left": "20%", "margin-right": "20%"}}
+                                style={{"margin-top": "10%", "margin-left": "20%", "margin-right": "20%", "background-color": "#E65100"}}
                                 onClick={() => this.submitRegistration()}
                         >Register</Button>
                     </form>
@@ -67,9 +64,5 @@ class SignUp extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    const {userName, email} = state;
-    return {userName, email};
-}
 
-export default connect(mapStateToProps, {addUser})(SignUp);
+export default SignUp;

@@ -1,5 +1,6 @@
 .appbar-buttons {
-    margin-left: 80%;
+    position: fixed;
+    left: 77%;
 }
 .link-button {
     color: white;
@@ -30,4 +31,10 @@
 }
 td, th {
     text-align: center !important;
+}
+.appbar {
+    background-color: #E65100 !important;
+}
+input {
+    border-color: #E65100 !important;
 }

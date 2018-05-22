@@ -37,7 +37,7 @@ class App extends Component {
     render() {
         return (
             <div>
-                <AppBar position="static">
+                <AppBar className="appbar" position="static">
                     <Toolbar>
                         <Typography variant="title" color="inherit" className="classes.flex">
                             List of users

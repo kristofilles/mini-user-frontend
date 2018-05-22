@@ -26,7 +26,7 @@ class SignIn extends Component {
     render() {
         return (
             <div>
-                <AppBar position="static">
+                <AppBar className="appbar" position="static">
                     <Toolbar>
                         <Typography align="center" variant="title" color="inherit" className="form-name">
                             Log in page
@@ -48,7 +48,7 @@ class SignIn extends Component {
                             <FormHelperText>password</FormHelperText>
                         </FormControl>
                         <Button variant="raised" color="primary"
-                                style={{"margin-top": "10%", "margin-left": "20%", "margin-right": "20%"}}
+                                style={{"margin-top": "10%", "margin-left": "20%", "margin-right": "20%", "background-color": "#E65100"}}
                                 onClick={() => this.submitLogin()}
                         >Login</Button>
                     </form>
