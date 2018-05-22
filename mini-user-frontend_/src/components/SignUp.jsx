@@ -41,7 +41,7 @@ class SignUp extends Component {
                 } else {
                     this.setState({message: "try again"})
                 }
-            })
+            });
     }
 
     render() {

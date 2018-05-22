@@ -12,6 +12,8 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
 import SignUp from './SignUp';
+import Icon from "@material-ui/core/es/Icon/Icon";
+import axios from 'axios';
 
 class App extends Component {
 
@@ -29,19 +31,33 @@ class App extends Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
         this.checkAdminInCookies();
-        fetch('http://localhost:8080/api/users')
+        this.fetchApi()
+    }
+
+    deleteUser(id) {
+        console.log(id);
+        axios.get(`http://localhost:8080/api/delete/${id}`)
+            .then(response => {
+                console.log("delete", response.data)
+            })
+    }
+
+    fetchApi() {
+        axios.get('http://localhost:8080/api/users')
             .then(results => {
-                return results.json();
-            }).then((users) => {
+                return results.data
+            })
+            .then((users) => {
                 users.map((user) => {
                     return this.setState({
                         users: [...this.state.users, user]
                     })
                 })
-        })
-    }
+            })
+    };
+
 
     logOut() {
         delete_cookie("loggedIn");
@@ -69,16 +85,24 @@ class App extends Component {
                         <Table>
                             <TableHead className="app-table">
                                 <TableRow>
+                                    <TableCell padding="dense">#ID</TableCell>
                                     <TableCell padding="dense">User name</TableCell>
                                     <TableCell padding="dense">email</TableCell>
+                                    <TableCell padding="dense"></TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {this.state.users.map(user => {
                                     return (
-                                        <TableRow key={user.userName} hover={true}>
+                                        <TableRow key={user.id} hover={true}>
+                                            <TableCell padding="dense">{user.id}</TableCell>
                                             <TableCell padding="dense">{user.userName}</TableCell>
                                             <TableCell padding="dense">{user.email}</TableCell>
+                                            <TableCell padding="dense">
+                                                <Icon data-id={user.id}
+                                                      onClick={event => this.deleteUser(event.target.getAttribute("data-id"))}
+                                                >delete</Icon>
+                                            </TableCell>
                                         </TableRow>
                                     )
                                 })}
