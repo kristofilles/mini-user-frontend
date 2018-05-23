@@ -13,6 +13,19 @@ import {addUser} from "../actions";
 
 class SignUp extends Component {
 
+    handleOpen = () => {
+        this.setState({open: true});
+    };
+    handleClose = () => {
+        this.setState({open: false});
+    };
+    handleCloseSnack = (event, reason) => {
+        if (reason === 'clickaway') {
+            this.setState({snackOpen: false})
+        }
+        this.setState({snackOpen: false})
+    };
+
     constructor(props) {
         super(props);
         this.state = {
@@ -24,48 +37,26 @@ class SignUp extends Component {
         }
     }
 
-    handleOpen = () => {
-        this.setState({ open: true });
-    };
-
-    handleClose = () => {
-        this.setState({ open: false });
-    };
-
     submitRegistration() {
-        console.log("state", this.state);
         axios.post('http://localhost:8080/api/register', {
             userName: this.state.userName,
             email: this.state.email
         })
             .then(response => {
-                if (response.data === 'ACCEPTED') {
+                if (response.data !== null) {
                     let user = {
-                        id: this.getMaxProperty(this.props.users) + 1,
-                        userName: this.state.userName,
-                        email: this.state.email
+                        id: response.data.id,
+                        userName: response.data.userName,
+                        email: response.data.email
                     };
                     this.props.addUser(user);
-                    this.setState({message: "User added successfully!"});
+                    this.setState({message: "User with id " + user.id + " added successfully!"});
                 } else {
                     this.setState({message: "Oooopss... Something went wrong. Please try again!"})
                 }
-                this.setState({open: false});
-                this.setState({snackOpen: true});
+                this.setState({open: false, snackOpen: true});
             });
     }
-
-    getMaxProperty(arrayOfObjects) {
-        const arrayOfValues = arrayOfObjects.map(obj => obj.id);
-        return Math.max(...arrayOfValues);
-    }
-
-    handleCloseSnack = (event, reason) => {
-        if (reason === 'clickaway') {
-            this.setState({snackOpen: false})
-        }
-        this.setState({snackOpen: false})
-    };
 
     render() {
         return (
@@ -77,7 +68,7 @@ class SignUp extends Component {
                         className="fab-button"
                         onClick={this.handleOpen}
                 >
-                    <AddIcon />
+                    <AddIcon/>
                 </Button>
                 <Modal
                     aria-labelledby="simple-modal-title"
@@ -100,7 +91,12 @@ class SignUp extends Component {
                                 <FormHelperText>email address</FormHelperText>
                             </FormControl>
                             <Button variant="raised" color="primary"
-                                    style={{"margin-top": "10%", "margin-left": "20%", "margin-right": "20%", "background-color": "#E65100"}}
+                                    style={{
+                                        "margin-top": "10%",
+                                        "margin-left": "20%",
+                                        "margin-right": "20%",
+                                        "background-color": "#E65100"
+                                    }}
                                     onClick={() => this.submitRegistration()}
                             >Add User</Button>
                         </form>

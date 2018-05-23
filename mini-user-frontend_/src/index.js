@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Route, Switch} from 'react-router';
-import {BrowserRouter, Redirect} from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { createStore} from 'redux';
+import {BrowserRouter} from 'react-router-dom';
+import {Provider} from 'react-redux';
+import {createStore} from 'redux';
 
 import './index.css';
 
@@ -18,7 +18,7 @@ export const PrivateRoute = ({component: Component, ...rest}) => {
         read_cookie("loggedIn") === true
             ? <Component {...props} />
             : <Route to="/signin" component={SignIn}/>
-    )} />
+    )}/>
 };
 
 const STORE = createStore(reducer);

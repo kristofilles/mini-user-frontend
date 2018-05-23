@@ -8,8 +8,8 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import axios from 'axios';
-import { withRouter } from "react-router-dom";
-import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
+import {withRouter} from "react-router-dom";
+import {bake_cookie} from 'sfcookies';
 
 
 class SignIn extends Component {
@@ -60,7 +60,12 @@ class SignIn extends Component {
                             <FormHelperText>password</FormHelperText>
                         </FormControl>
                         <Button variant="raised" color="primary"
-                                style={{"margin-top": "10%", "margin-left": "20%", "margin-right": "20%", "background-color": "#E65100"}}
+                                style={{
+                                    "margin-top": "10%",
+                                    "margin-left": "20%",
+                                    "margin-right": "20%",
+                                    "background-color": "#E65100"
+                                }}
                                 onClick={() => this.submitLogin()}
                         >Login</Button>
                     </form>

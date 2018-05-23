@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Link, Redirect} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -10,25 +10,35 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
+import {delete_cookie, read_cookie} from 'sfcookies';
 import SignUp from './SignUp';
 import Icon from "@material-ui/core/es/Icon/Icon";
 import axios from 'axios';
-import {addUser, deleteUser, clearUsers} from "../actions";
+import {addUser, clearUsers, deleteUser} from "../actions";
 import {connect} from 'react-redux';
+import Snackbar from "@material-ui/core/es/Snackbar/Snackbar";
 
 class App extends Component {
+
+    handleCloseSnack = (event, reason) => {
+        if (reason === 'clickaway') {
+            this.setState({snackOpen: false})
+        }
+        this.setState({snackOpen: false})
+    };
 
     constructor(props) {
         super(props);
         this.state = {
             users: [],
-            adminLoggedIn: false
+            adminLoggedIn: false,
+            message: "",
+            snackOpen: false
         }
     }
 
     checkAdminInCookies() {
-        if (read_cookie("loggedIn")===true) {
+        if (read_cookie("loggedIn") === true) {
             this.setState({adminLoggedIn: true})
         }
     }
@@ -41,10 +51,15 @@ class App extends Component {
     deleteUser(id) {
         axios.get(`http://localhost:8080/api/delete/${id}`)
             .then(response => {
-                this.setState({
-                    users: this.state.users.filter((_, i) => i !== id)
-                });
-                this.props.deleteUser(id);
+                if (response.data === 'ACCEPTED') {
+                    this.setState({
+                        users: this.state.users.filter((_, i) => i !== id)
+                    });
+                    this.props.deleteUser(id);
+                    this.setState({message: "User with id " + id + " deleted successfully!", snackOpen: true});
+                } else {
+                    this.setState({message: "Oooops.... something went wrong. Please Try again!", snackOpen: true});
+                }
             });
     }
 
@@ -62,7 +77,6 @@ class App extends Component {
                 })
             });
     };
-
 
     logOut() {
         delete_cookie("loggedIn");
@@ -82,7 +96,8 @@ class App extends Component {
                         <div className="appbar-buttons">
                             {this.state.adminLoggedIn ?
                                 <Button color="inherit" onClick={() => this.logOut()}>Logout</Button>
-                              : <Button color="inherit"><Link className='link-button' to="/signin">Login</Link></Button> }
+                                : <Button color="inherit"><Link className='link-button'
+                                                                to="/signin">Login</Link></Button>}
                         </div>
                     </Toolbar>
                 </AppBar>
@@ -115,9 +130,22 @@ class App extends Component {
                             </TableBody>
                         </Table>
                     </Paper>
+                    <Snackbar
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'left',
+                        }}
+                        open={this.state.snackOpen}
+                        autoHideDuration={4000}
+                        onClose={this.handleCloseSnack}
+                        ContentProps={{
+                            'aria-describedby': 'message-id',
+                        }}
+                        message={<span id="message-id">{this.state.message}</span>}
+                    />
                 </div>
                 {this.state.adminLoggedIn
-                    ? <SignUp />
+                    ? <SignUp/>
                     : <div></div>}
             </div>
         )
