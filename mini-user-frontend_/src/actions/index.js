@@ -1,13 +1,11 @@
-import {ADD_USER, DELETE_USER} from "../constants";
+import {ADD_USER, DELETE_USER, DELETE_USERS} from "../constants";
 
 export const addUser = (user) => {
     let {id, userName, email} = user;
-    const action = {
+    return {
         type: ADD_USER,
         id, userName, email
     };
-    console.log('action in addUser', action);
-    return action;
 };
 
 export const deleteUser = (id) => {
@@ -15,4 +13,10 @@ export const deleteUser = (id) => {
         type: DELETE_USER,
         id
     };
+};
+
+export const clearUsers = () => {
+    return {
+        type: DELETE_USERS
+    }
 };

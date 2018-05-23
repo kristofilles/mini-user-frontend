@@ -14,7 +14,7 @@ import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
 import SignUp from './SignUp';
 import Icon from "@material-ui/core/es/Icon/Icon";
 import axios from 'axios';
-import {addUser, deleteUser} from "../actions";
+import {addUser, deleteUser, clearUsers} from "../actions";
 import {connect} from 'react-redux';
 
 class App extends Component {
@@ -39,10 +39,8 @@ class App extends Component {
     }
 
     deleteUser(id) {
-        console.log(id);
         axios.get(`http://localhost:8080/api/delete/${id}`)
             .then(response => {
-                console.log("delete", response.data);
                 this.setState({
                     users: this.state.users.filter((_, i) => i !== id)
                 });
@@ -69,6 +67,7 @@ class App extends Component {
     logOut() {
         delete_cookie("loggedIn");
         this.setState({adminLoggedIn: false});
+        this.props.clearUsers();
         this.props.history.push("/");
     }
 
@@ -132,4 +131,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, {addUser, deleteUser})(App);
+export default connect(mapStateToProps, {addUser, deleteUser, clearUsers})(App);

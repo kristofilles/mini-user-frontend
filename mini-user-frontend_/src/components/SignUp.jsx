@@ -39,7 +39,6 @@ class SignUp extends Component {
             email: this.state.email
         })
             .then(response => {
-                console.log('registration response', response.data);
                 if (response.data === 'ACCEPTED') {
                     let user = {
                         id: this.getMaxProperty(this.props.users) + 1,

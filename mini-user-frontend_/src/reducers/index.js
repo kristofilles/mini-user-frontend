@@ -1,4 +1,4 @@
-import {ADD_USER, DELETE_USER} from "../constants";
+import {ADD_USER, DELETE_USER, DELETE_USERS} from "../constants";
 
 let user = {
     id: null,
@@ -7,7 +7,7 @@ let user = {
 };
 
 const removeById = (state = [], id) => {
-    return state.filter(user => user.id !== id);
+    return state.filter(user => user.id != id);
 };
 
 const users = (state = [], action) => {
@@ -20,6 +20,9 @@ const users = (state = [], action) => {
             return users;
         case DELETE_USER:
             users = removeById(state, action.id);
+            return users;
+        case DELETE_USERS:
+            users = [];
             return users;
         default:
             return state;
