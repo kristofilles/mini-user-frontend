@@ -7,6 +7,9 @@ import Paper from '@material-ui/core/Paper';
 import Modal from '@material-ui/core/Modal';
 import AddIcon from '@material-ui/icons/Add';
 import axios from 'axios';
+import Snackbar from "@material-ui/core/es/Snackbar/Snackbar";
+import {connect} from 'react-redux';
+import {addUser} from "../actions";
 
 class SignUp extends Component {
 
@@ -16,7 +19,8 @@ class SignUp extends Component {
             userName: "",
             email: "",
             open: false,
-            message: ""
+            message: "",
+            snackOpen: false
         }
     }
 
@@ -36,13 +40,33 @@ class SignUp extends Component {
         })
             .then(response => {
                 console.log('registration response', response.data);
-                if (response.data === 'ACEPTED') {
-                    this.setState({message: "User added"});
+                if (response.data === 'ACCEPTED') {
+                    let user = {
+                        id: this.getMaxProperty(this.props.users) + 1,
+                        userName: this.state.userName,
+                        email: this.state.email
+                    };
+                    this.props.addUser(user);
+                    this.setState({message: "User added successfully!"});
                 } else {
-                    this.setState({message: "try again"})
+                    this.setState({message: "Oooopss... Something went wrong. Please try again!"})
                 }
+                this.setState({open: false});
+                this.setState({snackOpen: true});
             });
     }
+
+    getMaxProperty(arrayOfObjects) {
+        const arrayOfValues = arrayOfObjects.map(obj => obj.id);
+        return Math.max(...arrayOfValues);
+    }
+
+    handleCloseSnack = (event, reason) => {
+        if (reason === 'clickaway') {
+            this.setState({snackOpen: false})
+        }
+        this.setState({snackOpen: false})
+    };
 
     render() {
         return (
@@ -83,10 +107,28 @@ class SignUp extends Component {
                         </form>
                     </Paper>
                 </Modal>
+                <Snackbar
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left',
+                    }}
+                    open={this.state.snackOpen}
+                    autoHideDuration={4000}
+                    onClose={this.handleCloseSnack}
+                    ContentProps={{
+                        'aria-describedby': 'message-id',
+                    }}
+                    message={<span id="message-id">{this.state.message}</span>}
+                />
             </div>
         )
     }
 }
 
+function mapStateToProps(state) {
+    return {
+        users: state
+    }
+}
 
-export default SignUp;
+export default connect(mapStateToProps, {addUser})(SignUp);

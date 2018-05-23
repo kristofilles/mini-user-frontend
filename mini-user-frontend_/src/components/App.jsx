@@ -14,6 +14,8 @@ import { bake_cookie, read_cookie, delete_cookie } from 'sfcookies';
 import SignUp from './SignUp';
 import Icon from "@material-ui/core/es/Icon/Icon";
 import axios from 'axios';
+import {addUser, deleteUser} from "../actions";
+import {connect} from 'react-redux';
 
 class App extends Component {
 
@@ -31,17 +33,21 @@ class App extends Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.checkAdminInCookies();
-        this.fetchApi()
+        this.fetchApi();
     }
 
     deleteUser(id) {
         console.log(id);
         axios.get(`http://localhost:8080/api/delete/${id}`)
             .then(response => {
-                console.log("delete", response.data)
-            })
+                console.log("delete", response.data);
+                this.setState({
+                    users: this.state.users.filter((_, i) => i !== id)
+                });
+                this.props.deleteUser(id);
+            });
     }
 
     fetchApi() {
@@ -51,11 +57,12 @@ class App extends Component {
             })
             .then((users) => {
                 users.map((user) => {
-                    return this.setState({
+                    this.setState({
                         users: [...this.state.users, user]
-                    })
+                    });
+                    this.props.addUser(user);
                 })
-            })
+            });
     };
 
 
@@ -92,7 +99,7 @@ class App extends Component {
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {this.state.users.map(user => {
+                                {this.props.users.map(user => {
                                     return (
                                         <TableRow key={user.id} hover={true}>
                                             <TableCell padding="dense">{user.id}</TableCell>
@@ -119,4 +126,10 @@ class App extends Component {
 
 }
 
-export default App;
+function mapStateToProps(state) {
+    return {
+        users: state
+    }
+}
+
+export default connect(mapStateToProps, {addUser, deleteUser})(App);
